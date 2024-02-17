@@ -47,11 +47,12 @@ function addTask(input) {
       title: input.value,
       status: "Activa"
     });
-    //actualizamos el localStorage
-    localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+   
     //reseteamos el input
     input.value = "";
   }
+  //actualizamos el localStorage
+  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   //Volvemos a renderizar nuestras listas
   showAll(tareas);
   filterUncompleted(tareas);
@@ -65,7 +66,7 @@ function completeTask(tarea) {
   //y cambiamos su Estado, si esta completo pasa a Activa y viceversa
   (element.status === "Completada" ? element.status = "Activa" : element.status = "Completada")
   : undefined);
-  
+  //Actualizamoe el localStorage y volvemos a renderizar las listas
   localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   showAll(tareas);
   filterUncompleted(tareas);
@@ -74,7 +75,9 @@ function completeTask(tarea) {
 
 // Función para borrar una tarea
 function deleteTask(tarea) {
+  //Eliminamos del array la tarea con el id que pasamos como argumento a la funcion
   tareas = tareas.filter(elemento => elemento.id != tarea)
+  //Actualizamos el localStorage y volvemos a renderizar las listas
   localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   showAll(tareas);
   filterUncompleted(tareas);
@@ -96,9 +99,9 @@ function setEdit(tarea) {
 
 // Funcion para borrar todas las tareas
 function deleteAll() {
-  
-alert("clicked");
+  //Como el boton se encuentra en la pestaña de las completadas, filtramos para eliminar solamente las que tienen status "Completada"
   tareas = tareas.filter(element => element.status != "Completada")
+  //
   localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   showAll(tareas);
   filterUncompleted(tareas);
@@ -187,7 +190,9 @@ function showAll(lista){
   }
 }
 
-
+function renderizar (array){
+  //Actualizamos el localStorage y volvemos a renderizar las listas
+}
 
 showAll(tareas);
 filterUncompleted(tareas);
