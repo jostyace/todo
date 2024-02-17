@@ -83,7 +83,7 @@ function filterCompleted(lista) {
       label.classList.add("form-check-label");
       label.innerText = tarea.title;
       input.checked = true;
-      input.onchange = modificar(tarea.id);
+      input.onchange = function() {modificar(tarea.id)};
       label.classList.add("completada");
       completedContainer.appendChild(li);
       li.append(input, label);    
@@ -142,5 +142,6 @@ filterUncompleted(tareas);
 filterCompleted(tareas);
 
 function modificar(tarea){
-  alert(tarea)
+  tareas.forEach(element => element.status === "Completada" ? element.status = "Activa" : "Completada");
+  console.log(element.status)
 };
