@@ -191,10 +191,13 @@ function showAll(lista){
 }
 
 function renderizar (array){
-  //Actualizamos el localStorage y volvemos a renderizar las listas
+  //actualizamos el localStorage
+  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+  //Volvemos a renderizar nuestras listas
+  showAll(tareas);
+  filterUncompleted(tareas);
+  filterCompleted(tareas);
 }
 
-showAll(tareas);
-filterUncompleted(tareas);
-filterCompleted(tareas);
+renderizar(tareas);
 
