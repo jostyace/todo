@@ -4,7 +4,7 @@ if(localStorage.getItem("listadoTareas") === null){
 }
 
 
-const tareas = JSON.parse(localStorage.getItem("listadoTareas"));
+let tareas = JSON.parse(localStorage.getItem("listadoTareas"));
 const inputTodo = [...document.querySelectorAll(".inputTodo")];
 const todoContainer = document.getElementById("todoContainer");
 const activeContainer = document.getElementById("activeContainer");
@@ -55,7 +55,7 @@ function addTask(input) {
 function completeTask(tarea) {
   tareas.forEach(element => element.id === tarea ? 
   (element.status === "Completada" ? element.status = "Activa" : element.status = "Completada")
-  : console.log("no"));
+  : console.log(""));
   localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   showAll(tareas);
   filterUncompleted(tareas);
@@ -63,13 +63,23 @@ function completeTask(tarea) {
 }
 
 // Función para borrar una tarea
-function deleteTask() {
-  
+function deleteTask(tarea) {
+  tareas = tareas.filter(elemento => elemento.id != tarea)
+  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+  showAll(tareas);
+  filterUncompleted(tareas);
+  filterCompleted(tareas);
 }
 
 // Funcion para borrar todas las tareas
 function deleteAll() {
   
+alert("clicked");
+  tareas = tareas.filter(element => element.status != "Completada")
+  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+  showAll(tareas);
+  filterUncompleted(tareas);
+  filterCompleted(tareas);
 }
 
 // Función para filtrar tareas completadas
@@ -92,11 +102,18 @@ function filterCompleted(lista) {
       input.onchange = function() {completeTask(tarea.id)};
       label.classList.add("completada");
       const remove = document.createElement("i");
-      remove.classList.add("fa-remove")
+      remove.classList.add("fa-regular", "fa-trash-can")
+      remove.onclick = function() {deleteTask(tarea.id)};
       completedContainer.appendChild(li);
       li.append(input, label, remove);    
+      
       }  
     }
+    
+      const deleteAl = document.createElement("button")
+      deleteAl.textContent = "Delete"
+      deleteAl.onclick = deleteAll;
+      completedContainer.append(deleteAl);
 }
 
 // Función para filtrar tareas incompletas
@@ -117,7 +134,6 @@ function filterUncompleted(lista) {
       label.innerText = tarea.title;
       input.checked = false;
       input.onchange = function() {completeTask(tarea.id)};
-      //label.classList.remove("completada");
       activeContainer.appendChild(li);
       li.append(input, label);    
       }
@@ -140,8 +156,11 @@ function showAll(lista){
     label.innerText = tarea.title;
     input.checked = tarea.status === "Completada" ? (label.classList.add("completada"), input.checked = true) : (input.checked = false, label.classList.remove("completada"));
     input.onchange = function() {completeTask(tarea.id)};
+    const edit = document.createElement("i");
+    edit.classList.add("fa-regular", "fa-pen-to-square")
+    edit.onclick = function() {editTask(tarea.id)};
     todoContainer.appendChild(li);
-    li.append(input, label);    
+    li.append(input, label, edit);    
   }
 }
 
