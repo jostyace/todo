@@ -41,7 +41,7 @@ function addTask(input) {
     tareas.push({
       id: ultimoID +1,
       title: input.value,
-      status: "Activa"
+      status: "Completada"
     });
     localStorage.setItem("listadoTareas", JSON.stringify(tareas));
     input.value = "";
@@ -76,10 +76,10 @@ function filterCompleted(lista) {
       li.classList.add("form-check");
       const input = document.createElement("input");
       input.type = "checkbox";
-      input.id = tarea.id;
+      input.id = tarea.id + "-completada";
       input.classList.add("form-check-input");
       const label = document.createElement("label");
-      label.setAttribute("for", tarea.id);
+      label.setAttribute("for", tarea.id + "-completada");
       label.classList.add("form-check-label");
       label.innerText = tarea.title;
       input.checked = true;
