@@ -51,12 +51,7 @@ function addTask(input) {
     //reseteamos el input
     input.value = "";
   }
-  //actualizamos el localStorage
-  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
-  //Volvemos a renderizar nuestras listas
-  showAll(tareas);
-  filterUncompleted(tareas);
-  filterCompleted(tareas);
+  renderizar(tareas)
 }
 
 // Función para marcar una tarea como completada o imcompleta (Puede ser la misma función)
@@ -66,22 +61,14 @@ function completeTask(tarea) {
   //y cambiamos su Estado, si esta completo pasa a Activa y viceversa
   (element.status === "Completada" ? element.status = "Activa" : element.status = "Completada")
   : undefined);
-  //Actualizamoe el localStorage y volvemos a renderizar las listas
-  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
-  showAll(tareas);
-  filterUncompleted(tareas);
-  filterCompleted(tareas);
+  renderizar(tareas);
 }
 
 // Función para borrar una tarea
 function deleteTask(tarea) {
   //Eliminamos del array la tarea con el id que pasamos como argumento a la funcion
-  tareas = tareas.filter(elemento => elemento.id != tarea)
-  //Actualizamos el localStorage y volvemos a renderizar las listas
-  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
-  showAll(tareas);
-  filterUncompleted(tareas);
-  filterCompleted(tareas);
+  tareas = tareas.filter(elemento => elemento.id != tarea);
+  renderizar(tareas);
 }
 
 function setEdit(tarea) {
@@ -90,56 +77,41 @@ function setEdit(tarea) {
     addBtn1.textContent = "Update";
     console.log(elemento.title);
    }});
-  
-  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
-  showAll(tareas);
-  filterUncompleted(tareas);
-  filterCompleted(tareas);
+  renderizar(tareas);
 }
 
 // Funcion para borrar todas las tareas
 function deleteAll() {
   //Como el boton se encuentra en la pestaña de las completadas, filtramos para eliminar solamente las que tienen status "Completada"
   tareas = tareas.filter(element => element.status != "Completada")
-  //
-  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
-  showAll(tareas);
-  filterUncompleted(tareas);
-  filterCompleted(tareas);
+  renderizar(tareas);
 }
 
-// Función para filtrar tareas completadas
-function filterCompleted(lista) {
-    completedContainer.innerHTML = ""
-    for(let tarea of lista){
-      if(tarea.status === "Completada")
-      {
-      const li = document.createElement("li");
-      li.classList.add("form-check");
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.id = tarea.id;
-      input.classList.add("form-check-input");
-      const label = document.createElement("label");
-      label.setAttribute("for", tarea.id);
-      label.classList.add("form-check-label");
-      label.innerText = tarea.title;
-      input.checked = true;
-      input.onchange = function() {completeTask(tarea.id)};
-      label.classList.add("completada");
-      const remove = document.createElement("i");
-      remove.classList.add("fa-regular", "fa-trash-can")
-      remove.onclick = function() {deleteTask(tarea.id)};
-      completedContainer.appendChild(li);
-      li.append(input, label, remove);    
-      
-      }  
-    }
-    
-      const deleteAl = document.createElement("button")
-      deleteAl.textContent = "Delete"
-      deleteAl.onclick = deleteAll;
-      completedContainer.append(deleteAl);
+
+
+
+//Funcion para mostrar las tareas
+function showAll(lista){
+  todoContainer.innerHTML = "";
+  for(let tarea of lista){
+    const li = document.createElement("li");
+    li.classList.add("form-check");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = tarea.id;
+    input.classList.add("form-check-input");
+    const label = document.createElement("label");
+    label.setAttribute("for", tarea.id);
+    label.classList.add("form-check-label");
+    label.innerText = tarea.title;
+    input.checked = tarea.status === "Completada" ? (label.classList.add("completada"), input.checked = true) : (input.checked = false, label.classList.remove("completada"));
+    input.onchange = function() {completeTask(tarea.id)};
+    const edit = document.createElement("i");
+    edit.classList.add("fa-regular", "fa-pen-to-square")
+    edit.onclick = function() {setEdit(tarea.id)};
+    todoContainer.appendChild(li);
+    li.append(input, label, edit);    
+  }
 }
 
 // Función para filtrar tareas incompletas
@@ -166,37 +138,46 @@ function filterUncompleted(lista) {
     }
 }
 
-//Funcion para mostrar las tareas
-function showAll(lista){
-  todoContainer.innerHTML = "";
-  for(let tarea of lista){
-    const li = document.createElement("li");
-    li.classList.add("form-check");
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.id = tarea.id;
-    input.classList.add("form-check-input");
-    const label = document.createElement("label");
-    label.setAttribute("for", tarea.id);
-    label.classList.add("form-check-label");
-    label.innerText = tarea.title;
-    input.checked = tarea.status === "Completada" ? (label.classList.add("completada"), input.checked = true) : (input.checked = false, label.classList.remove("completada"));
-    input.onchange = function() {completeTask(tarea.id)};
-    const edit = document.createElement("i");
-    edit.classList.add("fa-regular", "fa-pen-to-square")
-    edit.onclick = function() {setEdit(tarea.id)};
-    todoContainer.appendChild(li);
-    li.append(input, label, edit);    
-  }
+// Función para filtrar tareas completadas
+function filterCompleted(lista) {
+    completedContainer.innerHTML = ""
+    for(let tarea of lista){
+      if(tarea.status === "Completada")
+      {
+      const li = document.createElement("li");
+      li.classList.add("form-check");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = tarea.id;
+      input.classList.add("form-check-input");
+      const label = document.createElement("label");
+      label.setAttribute("for", tarea.id);
+      label.classList.add("form-check-label");
+      label.innerText = tarea.title;
+      input.checked = true;
+      input.onchange = function() {completeTask(tarea.id)};
+      label.classList.add("completada");
+      const remove = document.createElement("i");
+      remove.classList.add("fa-regular", "fa-trash-can")
+      remove.onclick = function() {deleteTask(tarea.id)};
+      completedContainer.appendChild(li);
+      li.append(input, label, remove);    
+      }  
+    }
+      const deleteAl = document.createElement("button")
+      deleteAl.textContent = "Delete"
+      deleteAl.onclick = deleteAll;
+      completedContainer.append(deleteAl);
 }
 
+//Funcion para ejecutar el renderizado
 function renderizar (array){
   //actualizamos el localStorage
-  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+  localStorage.setItem("listadoTareas", JSON.stringify(array));
   //Volvemos a renderizar nuestras listas
-  showAll(tareas);
-  filterUncompleted(tareas);
-  filterCompleted(tareas);
+  showAll(array);
+  filterUncompleted(array);
+  filterCompleted(array);
 }
 
 renderizar(tareas);
