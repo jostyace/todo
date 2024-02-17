@@ -5,7 +5,7 @@ if(localStorage.getItem("listadoTareas") === null){
 
 
 let tareas = JSON.parse(localStorage.getItem("listadoTareas"));
-const inputTodo = [...document.querySelectorAll(".inputTodo")];
+//Obtenemos nuestros elementos del DOM
 const todoContainer = document.getElementById("todoContainer");
 const activeContainer = document.getElementById("activeContainer");
 const completedContainer = document.getElementById("completedContainer");
@@ -28,24 +28,31 @@ La estructura de cada objeto "tarea" es la siguiente:
 }
 
 */
+//Agregamos los EventListeners
 addBtn1.addEventListener("click", () =>  addTask(input1));
 addBtn2.addEventListener("click", () => addTask(input2));
 
 // Función para añadir una nueva tarea
 function addTask(input) {
+  //Validamos que el texto no este vacio
   if (input.value === "") {
     alert("Debe ingresar la tarea");
   }else{
+    //Ubicamos el ultimonID para crear el nuevo ID que asignaremos a esta tarea
     let ultimoID = 0;
     tareas.forEach(element => element.id > ultimoID && element.id != 0 ? ultimoID = element.id : ultimoID);
+    //Enviamos la nueva tarea al array
     tareas.push({
       id: ultimoID +1,
       title: input.value,
       status: "Activa"
     });
+    //actualizamos el localStorage
     localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+    //reseteamos el input
     input.value = "";
   }
+  //Volvemos a renderizar nuestras listas
   showAll(tareas);
   filterUncompleted(tareas);
   filterCompleted(tareas);
@@ -53,9 +60,12 @@ function addTask(input) {
 
 // Función para marcar una tarea como completada o imcompleta (Puede ser la misma función)
 function completeTask(tarea) {
+  // con una ternaria unpbicanos nuestro elemento a modificar
   tareas.forEach(element => element.id === tarea ? 
+  //y cambiamos su Estado, si esta completo pasa a Activa y viceversa
   (element.status === "Completada" ? element.status = "Activa" : element.status = "Completada")
-  : console.log(""));
+  : undefined);
+  
   localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   showAll(tareas);
   filterUncompleted(tareas);
@@ -65,6 +75,19 @@ function completeTask(tarea) {
 // Función para borrar una tarea
 function deleteTask(tarea) {
   tareas = tareas.filter(elemento => elemento.id != tarea)
+  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+  showAll(tareas);
+  filterUncompleted(tareas);
+  filterCompleted(tareas);
+}
+
+function setEdit(tarea) {
+  tareas.forEach(elemento => {if(elemento.id === tarea) {
+    input1.value = elemento.title;
+    addBtn1.textContent = "Update";
+    console.log(elemento.title);
+   }});
+  
   localStorage.setItem("listadoTareas", JSON.stringify(tareas));
   showAll(tareas);
   filterUncompleted(tareas);
@@ -158,7 +181,7 @@ function showAll(lista){
     input.onchange = function() {completeTask(tarea.id)};
     const edit = document.createElement("i");
     edit.classList.add("fa-regular", "fa-pen-to-square")
-    edit.onclick = function() {editTask(tarea.id)};
+    edit.onclick = function() {setEdit(tarea.id)};
     todoContainer.appendChild(li);
     li.append(input, label, edit);    
   }
