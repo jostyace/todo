@@ -41,7 +41,7 @@ function addTask(input) {
     tareas.push({
       id: ultimoID +1,
       title: input.value,
-      status: "Completada"
+      status: "Activa"
     });
     localStorage.setItem("listadoTareas", JSON.stringify(tareas));
     input.value = "";
@@ -52,8 +52,14 @@ function addTask(input) {
 }
 
 // Función para marcar una tarea como completada o imcompleta (Puede ser la misma función)
-function completeTask() {
-
+function completeTask(tarea) {
+  tareas.forEach(element => element.id === tarea ? 
+  (element.status === "Completada" ? element.status = "Activa" : element.status = "Completada")
+  : console.log("no"));
+  localStorage.setItem("listadoTareas", JSON.stringify(tareas));
+  showAll(tareas);
+  filterUncompleted(tareas);
+  filterCompleted(tareas);
 }
 
 // Función para borrar una tarea
@@ -76,17 +82,19 @@ function filterCompleted(lista) {
       li.classList.add("form-check");
       const input = document.createElement("input");
       input.type = "checkbox";
-      input.id = tarea.id + "-completada";
+      input.id = tarea.id;
       input.classList.add("form-check-input");
       const label = document.createElement("label");
-      label.setAttribute("for", tarea.id + "-completada");
+      label.setAttribute("for", tarea.id);
       label.classList.add("form-check-label");
       label.innerText = tarea.title;
       input.checked = true;
-      input.onchange = function() {modificar(tarea.id)};
+      input.onchange = function() {completeTask(tarea.id)};
       label.classList.add("completada");
+      const remove = document.createElement("i");
+      remove.classList.add("fa-remove")
       completedContainer.appendChild(li);
-      li.append(input, label);    
+      li.append(input, label, remove);    
       }  
     }
 }
@@ -108,6 +116,7 @@ function filterUncompleted(lista) {
       label.classList.add("form-check-label");
       label.innerText = tarea.title;
       input.checked = false;
+      input.onchange = function() {completeTask(tarea.id)};
       //label.classList.remove("completada");
       activeContainer.appendChild(li);
       li.append(input, label);    
@@ -130,6 +139,7 @@ function showAll(lista){
     label.classList.add("form-check-label");
     label.innerText = tarea.title;
     input.checked = tarea.status === "Completada" ? (label.classList.add("completada"), input.checked = true) : (input.checked = false, label.classList.remove("completada"));
+    input.onchange = function() {completeTask(tarea.id)};
     todoContainer.appendChild(li);
     li.append(input, label);    
   }
@@ -141,7 +151,3 @@ showAll(tareas);
 filterUncompleted(tareas);
 filterCompleted(tareas);
 
-function modificar(tarea){
-  tareas.forEach(element => element.status === "Completada" ? element.status = "Activa" : "Completada");
-  console.log(element.status)
-};
