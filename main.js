@@ -42,12 +42,7 @@ function addTask(input) {
     let ultimoID = 0;
     tareas.forEach(element => element.id > ultimoID && element.id != 0 ? ultimoID = element.id : ultimoID);
     //Enviamos la nueva tarea al array
-    tareas.push({
-      id: ultimoID +1,
-      title: input.value,
-      status: "Activa"
-    });
-   
+    tareas.push({id: ultimoID +1, title: input.value, status: "Activa"});
     //reseteamos el input
     input.value = "";
   }
@@ -71,6 +66,7 @@ function deleteTask(tarea) {
   renderizar(tareas);
 }
 
+//Prepara los elementos para editar la tarea
 function setEdit(tarea) {
   tareas.forEach(elemento => {if(elemento.id === tarea) {
     input1.value = elemento.title;
@@ -80,15 +76,12 @@ function setEdit(tarea) {
   renderizar(tareas);
 }
 
-// Funcion para borrar todas las tareas
+// Funcion para borrar todas las tareas Completadas
 function deleteAll() {
   //Como el boton se encuentra en la pestaña de las completadas, filtramos para eliminar solamente las que tienen status "Completada"
   tareas = tareas.filter(element => element.status != "Completada")
   renderizar(tareas);
 }
-
-
-
 
 //Funcion para mostrar las tareas
 function showAll(lista){
