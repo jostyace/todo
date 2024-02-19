@@ -67,13 +67,28 @@ function deleteTask(tarea) {
 }
 
 //Prepara los elementos para editar la tarea
-function setEdit(tarea) {
+function setEdit(tarea, label, edit) {
   tareas.forEach(elemento => {if(elemento.id === tarea) {
-    input1.value = elemento.title;
-    addBtn1.textContent = "Update";
-    console.log(elemento.title);
-   }});
+    const newInput = document.createElement("input");
+    newInput.type= "text"
+    newInput.value = elemento.title;
+    label.parentNode.replaceChild(newInput, label);
+    edit.classList.remove("fa-pen-to-square");
+    edit.classList.add("fa-circle-check");
+    edit.onclick = function(){editTask(newInput, tarea)}
+   }
+  });
+}
+
+function editTask(input, tarea) {
+  //Validamos que el texto no este vacio
+  if (input.value === "") {
+    alert("La tarea no debe estar vacía");
+  }else{
+    //Buscamos en nuestro array la tarea a editar y actualizamos su valor
+    tareas.forEach(element => element.id === tarea ? element.title = input.value : undefined);
   renderizar(tareas);
+  }
 }
 
 // Funcion para borrar todas las tareas Completadas
@@ -101,7 +116,7 @@ function showAll(lista){
     input.onchange = function() {completeTask(tarea.id)};
     const edit = document.createElement("i");
     edit.classList.add("fa-regular", "fa-pen-to-square")
-    edit.onclick = function() {setEdit(tarea.id)};
+    edit.onclick = function() {setEdit(tarea.id, label, edit)};
     todoContainer.appendChild(li);
     li.append(input, label, edit);    
   }
@@ -174,4 +189,3 @@ function renderizar (array){
 }
 
 renderizar(tareas);
-
