@@ -1,10 +1,12 @@
+//Inicializamos el localStorage
 if(localStorage.getItem("listadoTareas") === null){
   let tareas = [];
   localStorage.setItem("listadoTareas", JSON.stringify(tareas)); 
 }
 
-
+//Obtenemos los datos del localStorage
 let tareas = JSON.parse(localStorage.getItem("listadoTareas"));
+
 //Obtenemos nuestros elementos del DOM
 const todoContainer = document.getElementById("todoContainer");
 const activeContainer = document.getElementById("activeContainer");
@@ -14,39 +16,28 @@ const addBtn2 = document.getElementById("addBtn2");
 const input1 = document.getElementById("inputTodo1");
 const input2 = document.getElementById("inputTodo2");
 
-
-
-/* Los siguientes nombres de funciones son una sugerencia de funciones que necesitarás en tu programa,
-sin embargo, no te limites solo a estas funciones. Crea tantas como consideres necesarias.
-
-La estructura de cada objeto "tarea" es la siguiente:
-
-{
-  id: 1,
-  title: "tarea",
-  completed: false
-}
-
-*/
 //Agregamos los EventListeners
 addBtn1.addEventListener("click", () =>  addTask(input1));
 addBtn2.addEventListener("click", () => addTask(input2));
+input1.addEventListener("keypress", (e) => e.key === "Enter"? addTask(input1): undefined);
+input2.addEventListener("keypress", (e) => e.key === "Enter"? addTask(input2): undefined);
+guardarRenderizar(tareas);
 
 // Función para añadir una nueva tarea
 function addTask(input) {
   //Validamos que el texto no este vacio
   if (input.value === "") {
-    alert("Debe ingresar la tarea");
+    vacio(input);
   }else{
+    noVacio(input);
     //Ubicamos el ultimonID para crear el nuevo ID que asignaremos a esta tarea
-    let ultimoID = 0;
-    tareas.forEach(element => element.id > ultimoID && element.id != 0 ? ultimoID = element.id : ultimoID);
+    const ultimoID = tareas.reduce((max, tarea) => Math.max(max, tarea.id), 0);
     //Enviamos la nueva tarea al array
     tareas.push({id: ultimoID +1, title: input.value, status: "Activa"});
     //reseteamos el input
     input.value = "";
   }
-  renderizar(tareas)
+  guardarRenderizar(tareas)
 }
 
 // Función para marcar una tarea como completada o imcompleta (Puede ser la misma función)
@@ -56,38 +47,26 @@ function completeTask(tarea) {
   //y cambiamos su Estado, si esta completo pasa a Activa y viceversa
   (element.status === "Completada" ? element.status = "Activa" : element.status = "Completada")
   : undefined);
-  renderizar(tareas);
+  guardarRenderizar(tareas);
 }
 
 // Función para borrar una tarea
 function deleteTask(tarea) {
   //Eliminamos del array la tarea con el id que pasamos como argumento a la funcion
   tareas = tareas.filter(elemento => elemento.id != tarea);
-  renderizar(tareas);
+  guardarRenderizar(tareas);
 }
 
-//Prepara los elementos para editar la tarea
-function setEdit(tarea, label, edit) {
-  tareas.forEach(elemento => {if(elemento.id === tarea) {
-    const newInput = document.createElement("input");
-    newInput.type= "text"
-    newInput.value = elemento.title;
-    label.parentNode.replaceChild(newInput, label);
-    edit.classList.remove("fa-pen-to-square");
-    edit.classList.add("fa-circle-check");
-    edit.onclick = function(){editTask(newInput, tarea)}
-   }
-  });
-}
-
+//Funcion que realiza las acciones para editar la tarea
 function editTask(input, tarea) {
   //Validamos que el texto no este vacio
   if (input.value === "") {
-    alert("La tarea no debe estar vacía");
+    vacio(input);
   }else{
+    noVacio(input);
     //Buscamos en nuestro array la tarea a editar y actualizamos su valor
     tareas.forEach(element => element.id === tarea ? element.title = input.value : undefined);
-  renderizar(tareas);
+    guardarRenderizar(tareas);
   }
 }
 
@@ -95,10 +74,10 @@ function editTask(input, tarea) {
 function deleteAll() {
   //Como el boton se encuentra en la pestaña de las completadas, filtramos para eliminar solamente las que tienen status "Completada"
   tareas = tareas.filter(element => element.status != "Completada")
-  renderizar(tareas);
+  guardarRenderizar(tareas);
 }
 
-//Funcion para mostrar las tareas
+//Funcion para mostrar todas las tareas
 function showAll(lista){
   todoContainer.innerHTML = "";
   for(let tarea of lista){
@@ -112,7 +91,7 @@ function showAll(lista){
     label.setAttribute("for", tarea.id);
     label.classList.add("form-check-label");
     label.innerText = tarea.title;
-    input.checked = tarea.status === "Completada" ? (label.classList.add("completada"), input.checked = true) : (input.checked = false, label.classList.remove("completada"));
+    input.checked = tarea.status === "Completada" ? (label.classList.add("completada"), input.checked = true) : (label.classList.remove("completada"), input.checked = false);
     input.onchange = function() {completeTask(tarea.id)};
     const edit = document.createElement("i");
     edit.classList.add("fa-regular", "fa-pen-to-square")
@@ -122,8 +101,8 @@ function showAll(lista){
   }
 }
 
-// Función para filtrar tareas incompletas
-function filterUncompleted(lista) {
+// Función para mostrar tareas incompletas
+function showUncompleted(lista) {
     activeContainer.innerHTML = ""
     for(let tarea of lista){
       if(tarea.status === "Activa")
@@ -132,10 +111,10 @@ function filterUncompleted(lista) {
       li.classList.add("form-check");
       const input = document.createElement("input");
       input.type = "checkbox";
-      input.id = tarea.id;
+      input.id = tarea.id + "-Active";
       input.classList.add("form-check-input");
       const label = document.createElement("label");
-      label.setAttribute("for", tarea.id);
+      label.setAttribute("for", tarea.id + "-Active");
       label.classList.add("form-check-label");
       label.innerText = tarea.title;
       input.checked = false;
@@ -146,8 +125,8 @@ function filterUncompleted(lista) {
     }
 }
 
-// Función para filtrar tareas completadas
-function filterCompleted(lista) {
+// Función para mostrar tareas completadas
+function showCompleted(lista) {
     completedContainer.innerHTML = ""
     for(let tarea of lista){
       if(tarea.status === "Completada")
@@ -156,10 +135,10 @@ function filterCompleted(lista) {
       li.classList.add("form-check");
       const input = document.createElement("input");
       input.type = "checkbox";
-      input.id = tarea.id;
+      input.id = tarea.id + "-Completed";
       input.classList.add("form-check-input");
       const label = document.createElement("label");
-      label.setAttribute("for", tarea.id);
+      label.setAttribute("for", tarea.id + "-Completed");
       label.classList.add("form-check-label");
       label.innerText = tarea.title;
       input.checked = true;
@@ -173,19 +152,50 @@ function filterCompleted(lista) {
       }  
     }
       const deleteAl = document.createElement("button")
-      deleteAl.textContent = "Delete"
+      deleteAl.textContent = "delete all"
+      deleteAl.classList.add("btn", "deleteAll", "btn-primary")
       deleteAl.onclick = deleteAll;
       completedContainer.append(deleteAl);
 }
 
+//Prepara los elementos para editar la tarea
+function setEdit(tarea, label, edit) {
+  tareas.forEach(elemento => {if(elemento.id === tarea) {
+    const newInput = document.createElement("input");
+    newInput.type= "text"
+    newInput.value = elemento.title;
+    newInput.name = elemento.id;
+    newInput.focus();
+    newInput.addEventListener("keypress", (e) => e.key === "Enter" ? editTask(newInput, tarea): undefined);
+    label.parentNode.replaceChild(newInput, label);
+    newInput.focus(); 
+    edit.classList.remove("fa-pen-to-square");
+    edit.classList.add("fa-circle-check");
+    edit.onclick = function(){editTask(newInput, tarea)}
+   }
+  });
+}
+
 //Funcion para ejecutar el renderizado
-function renderizar (array){
+function guardarRenderizar (array){
   //actualizamos el localStorage
   localStorage.setItem("listadoTareas", JSON.stringify(array));
   //Volvemos a renderizar nuestras listas
   showAll(array);
-  filterUncompleted(array);
-  filterCompleted(array);
+  showUncompleted(array);
+  showCompleted(array);
 }
 
-renderizar(tareas);
+//Helper Functions
+function vacio(input){
+  input.classList.add("alerta");
+  input.placeholder = "Can't be empty";  input.focus();
+  
+};
+
+function noVacio(input){
+  input.classList.remove("alerta");
+  input.placeholder = "add details";
+  input.focus();
+};
+
