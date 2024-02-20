@@ -162,10 +162,24 @@ li.nav-item {
   font-weight: 500;
   display: flex;
   justify-content: space-between;
+  width: 100%;
+}
+
+label{
+  width: 100%;
+  padding-left: 9px;
 }
 
 .fa-regular{
   cursor: pointer;
+}
+
+.fa-regular:hover{
+  color: var(---color-primary);
+}
+
+.fa-circle-check:hover{
+  color: rgb(107, 172, 10);
 }
 
 .form-check-input:checked {
@@ -181,5 +195,23 @@ li.nav-item {
   border: none !important;
   right: 20px;
   position: absolute;
-  justify-content: space-between;}
+  justify-content: space-between;
+}
+
+#activeContainer>li>label{
+  padding-left: 0px !important;
+}
+  
+.editInput{
+  padding-left: 0px !important;
+  width: 100%;
+  margin: 0px 20px 0px 9px;
+  border: none;
+  border-bottom: 2px solid var(---color-primary);
+  text-align: left;
+  font-size: 1.1rem !important;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: var(---color-primary);
+}
   
