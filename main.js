@@ -165,6 +165,7 @@ function setEdit(tarea, label, edit) {
     newInput.type= "text"
     newInput.value = elemento.title;
     newInput.name = elemento.id;
+    newInput.classList.add("editInput");
     newInput.focus();
     newInput.addEventListener("keypress", (e) => e.key === "Enter" ? editTask(newInput, tarea): undefined);
     label.parentNode.replaceChild(newInput, label);
