@@ -165,6 +165,13 @@ li.nav-item {
   flex: 2.5;
 }
 
+.form-control:focus{
+  border-color: var(---color-primary);
+  outline: 0;
+  box-shadow: 3px 2px 13px -4px var(---color-primary); 
+
+}  
+
 .btn-primary{
   background-color: var(---color-primary);
   border: none !important;
