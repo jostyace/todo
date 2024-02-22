@@ -125,6 +125,10 @@ li.nav-item {
   padding: 15px;
 }
 
+.nova{
+  width: 100%;
+}
+
 .nav-link {
   border: none;
   font-size: 0.8rem;
