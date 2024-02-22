@@ -2,7 +2,7 @@
 
 Bienvenido al proyecto final del nivel 1. En este proyecto estaremos aplicando los conocimientos adquiridos a lo largo del nivel. Sigue las instrucciones de este archivo para completar el proyecto y ten en cuenta que estas mismas instrucciones se tomarán en cuenta para la evaluación del proyecto.
 
-## Instrucciones generalesaaaaaaaaaaaaaaa
+## Instrucciones generales
 
 La empresa **Funval** desea implementar un nuevo sistema que ayude a los trabajarores a organizar sus tareas pendientes. El diseño de la aplicación web ya está terminado y ahora necesita que lleves a codigo este proyecto. Por suerte, ya tienes una base de código que puedes utilizar para comenzar a trabajar. Según las instrucciones que el cliente nos ha dado, te daré las instrucciones para completar el proyecto.
 
