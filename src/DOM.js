@@ -6,7 +6,7 @@ function showCompleted(lista, completeTask, deleteTask, deleteAll) {
 
   let completadas = lista.filter(element => element.status === "Completada");
   if(completadas.length < 1){
-      sinElementos(completedContainer, "No tasks completed yet, please add a task and complete it.", "solid", "list-check");
+      sinElementos(completedContainer, "No tasks completed yet, please add a task and complete it.", "solid", "face-sad-tear");
   }
   else{
     for(let tarea of lista){
