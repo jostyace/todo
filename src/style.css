@@ -1,5 +1,6 @@
 :root{
   ---color-primary : rgb(0, 110, 255);
+  ---color-secondary : rgb(1, 56, 137);
 }
 .poppins-thin {
   font-family: "Poppins", sans-serif;
@@ -99,10 +100,9 @@ h1 {
 }
 
 #Navigation {
-  width: 45%;
-
   display: flex;
   justify-content: center;
+  min-width: 45%;
 }
 li.nav-item {
   flex: 1;
@@ -111,7 +111,7 @@ li.nav-item {
 }
 
 #Content {
-  width: 45%;
+  min-width: 45%;
 }
 
 .inputContainer {
@@ -162,27 +162,45 @@ li.nav-item {
 }
 
 #addBtn1, #addBtn2{
-  flex: 1.5;
+  flex: 2.5;
+}
+
+.btn-primary{
+  background-color: var(---color-primary);
+  border: none !important;
+}
+
+.btn-primary:hover{
+  background-color: var(---color-secondary);
+  border: none !important;
 }
 
 #todoContainer, #activeContainer, #completedContainer {
-  padding: 25px 10px !important;
+  padding: 25px 0px !important;
+  height: calc(100vh - 250px);
+  /* background-color: red; */
 }
 
 .form-check {
   padding-left: 1.5em;
-  margin-bottom: 1.1rem;
+  padding: 0.55rem 0rem;
   font-size: 1.1rem;
   letter-spacing: -0.8px;
   font-weight: 500;
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 0px;
+}
+
+.form-check .form-check-input {
+  margin-left: 0px;
 }
 
 label{
   width: 100%;
-  padding-left: 9px;
+  padding-left: 10px;
+  overflow-wrap: break-word;
 }
 
 .fa-regular{
@@ -214,7 +232,7 @@ label{
 }
 
 #activeContainer>li>label{
-  padding-left: 0px !important;
+  padding-left: 10px !important;
 }
   
 .editInput{
@@ -230,3 +248,136 @@ label{
   color: var(---color-primary);
 }
   
+.flotante{
+  position: fixed;
+  bottom: 35px;
+  right: 20px;
+  width: 50px;
+  height: 300px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.iconoFlotante:hover{
+  background-color: var(---color-secondary) !important;
+  color: white;
+}
+#themeButton{
+  display: flex;
+  justify-content: end;
+  width: 100%;
+}
+.iconoFlotante{
+  width: 50px !important;
+  height: 50px !important;
+  background-color: var(---color-primary) !important;
+  border-radius: 50%;
+  z-index: 99999;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.theme:hover{
+  opacity: 0.9;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}    
+.theme{
+  width: 25px !important;
+  height: 25px !important;
+  border-radius: 50% !important;    cursor: pointer !important;
+  }
+#theme1{
+  background-color: #ff9900;
+}
+#theme2{
+  background-color: #0d6efd;
+}
+#theme3{
+  background-color: #9100ff;
+}
+#theme4{
+  background-color: #ff1d1d;
+}
+#theme5{
+  background-color: #89c725;
+}
+#themeSelector{
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  border-radius: 35px;
+  background-color: white !important;
+  padding: 20px;
+  gap: 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: none;
+}
+
+.oculta{
+  display: flex !important;
+}
+
+.sinElementos{
+  list-style: none !important;
+  display: flex !important;
+  width: 100% !important;
+  padding: 0 50px !important;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.iconoVacio{
+  color: var(---color-primary)!important;
+  font-size: 100px;
+}
+
+
+@media (min-width: 576px) { 
+  #Content {
+    width: 85%;
+  }
+  #Navigation {
+    width: 85%;
+  }
+  }
+
+@media (min-width: 768px) { 
+
+    #Content {
+      width: 75%;
+    }
+    #Navigation {
+      width: 75%;
+    }
+}
+
+@media (min-width: 992px) { 
+  
+  #Content {
+    width: 65%;
+  }
+  #Navigation {
+    width: 65% !important;
+  }
+ }
+
+ @media (min-width: 1200px) { 
+  #Content {
+    width: 45%;
+  }
+  #Navigation {
+    width: 45% !important;
+  }
+
+  }
+
