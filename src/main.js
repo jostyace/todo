@@ -6,9 +6,16 @@ if(localStorage.getItem("listadoTareas") === null){
   let tareas = [];
   localStorage.setItem("listadoTareas", JSON.stringify(tareas)); 
 }
+if(localStorage.getItem("color") === null){
+  let color = "";
+  localStorage.setItem("color", JSON.stringify(color)); 
+}
 
 //Obtenemos los datos del localStorage
 let tareas = JSON.parse(localStorage.getItem("listadoTareas"));
+let color = JSON.parse(localStorage.getItem("color"));
+
+
 
 //Obtenemos nuestros elementos del DOM
 const todoContainer = document.getElementById("todoContainer");
@@ -18,12 +25,22 @@ const addBtn1 = document.getElementById("addBtn1");
 const addBtn2 = document.getElementById("addBtn2");
 const input1 = document.getElementById("inputTodo1");
 const input2 = document.getElementById("inputTodo2");
+const r = document.querySelector(':root');
+const themeSelector = document.getElementById("themeSelector");
+const btnTheme = document.getElementById("btnTheme");
+
+//Inicializar Color con el obtenido del localStorage
+r.style.setProperty('---color-primary', color);
+let oscuro = tinycolor(color);
+oscuro = oscuro.brighten(10).toString()
+r.style.setProperty('---color-secondary', oscuro);
 
 //Agregamos los EventListeners
 addBtn1.addEventListener("click", () =>  addTask(input1));
 addBtn2.addEventListener("click", () => addTask(input2));
 input1.addEventListener("keypress", (e) => e.key === "Enter"? addTask(input1): undefined);
 input2.addEventListener("keypress", (e) => e.key === "Enter"? addTask(input2): undefined);
+btnTheme.addEventListener("click", () =>  themeSelector.classList.toggle("oculta"));
 guardarRenderizar(tareas);
 
 //Funcion para ejecutar el renderizado y actualizar el localStorage
@@ -73,7 +90,7 @@ function deleteTask(tarea) {
 //Funcion que realiza las acciones para editar la tarea
 function editTask(input, tarea) {
   //Validamos que el texto no este vacio
-  if (input.value === "") {
+  if (input.value === "" || input.value.trim() === "") {
     vacio(input, tarea);
   }else{
     noVacio(input, tarea);
@@ -94,6 +111,8 @@ function deleteAll() {
 function vacio(input, tarea){
   if(input.name == tarea){
     input.classList.add("alertaEdit");
+    input.value = "";
+    input.placeholder = "can't be empty";
   }else{
   input.classList.add("alerta");
   input.placeholder = "Can't be empty";  
@@ -111,3 +130,17 @@ function noVacio(input, tarea){
   }
   
 };
+
+
+themeSelector.addEventListener("click", (e) =>{
+    if(e.target.id !== "themeSelector"){
+        let colorActual = window.getComputedStyle(e.target).backgroundColor;
+        localStorage.setItem("color", JSON.stringify(colorActual));
+        r.style.setProperty('---color-primary', colorActual);
+        let oscuro = tinycolor(colorActual);
+        oscuro = oscuro.brighten(10).toString()
+        r.style.setProperty('---color-secondary', oscuro);
+        
+
+        }
+})  
